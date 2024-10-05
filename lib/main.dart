@@ -1,5 +1,7 @@
-import 'package:agro_xplore/screens/home.dart';
+import 'package:agro_xplore/firebase_options.dart';
+import 'package:agro_xplore/screens/Auth/splash_screen.dart';
 import 'package:agro_xplore/style/style.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
 void main() async {
@@ -9,7 +11,9 @@ void main() async {
 }
 
 Future<void> initializeApp() async {
-
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -19,7 +23,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
         theme: uiTheme(),
-        home: const HomeScreen()
+        home: const SplashScreen()
     );
   }
 }

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "400820513149",
+    "project_id": "agroxplore-20288",
+    "storage_bucket": "agroxplore-20288.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:400820513149:android:a3c4a9ae944eba1742c414",
+        "android_client_info": {
+          "package_name": "com.agroxplore.agro_xplore"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA94Ju4ijztqaUlk8cljhfiHLGKVAkNgMg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -75,10 +75,6 @@ class _HomeScreenState extends State<HomeScreen> {
       statusBarIconBrightness: Brightness.light, // Color de los íconos en la barra de estado
     ));
     return Scaffold(
-      // appBar: AppBar(
-      //
-      //   backgroundColor: Theme.of(context).colorScheme.primary,
-      // ),
       body: SafeArea(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
