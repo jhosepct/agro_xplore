@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:agro_xplore/assets/assets.dart';
 
-
 class Signinscreen extends StatefulWidget {
   const Signinscreen({super.key});
 
@@ -73,7 +72,8 @@ class _SigninscreenState extends State<Signinscreen> {
                           colors: [
                             Colors.black38,
                             Theme.of(context).colorScheme.secondary
-                          ], begin: Alignment.topCenter)),
+                          ],
+                          begin: Alignment.topCenter)),
                   decoration: const BoxDecoration(
                     image: DecorationImage(
                       image: AssetImage(Assets.intro),
@@ -185,30 +185,57 @@ class _SigninscreenState extends State<Signinscreen> {
                       _loading
                           ? CircularProgressIndicator()
                           : ElevatedButton(
-                        onPressed: () {
-                          _authenticationBloc.add(AuthLoginEvent(
-                            email: _emailController.text,
-                            password: _passwordController.text,
-                          ));
-                        },
-                        child: Text('Iniciar Sesión', style: TextStyle(color: Colors.white)),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Theme.of(context).colorScheme.primary,
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 100, vertical: 15),
-                        ),
-                      ),
+                              onPressed: () {
+                                _authenticationBloc.add(AuthLoginEmailEvent(
+                                  email: _emailController.text,
+                                  password: _passwordController.text,
+                                ));
+                              },
+                              child: Text('Iniciar Sesión',
+                                  style: TextStyle(color: Colors.white)),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor:
+                                    Theme.of(context).colorScheme.primary,
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 100, vertical: 15),
+                              ),
+                            ),
                       SizedBox(height: 20),
                       TextButton(
                         onPressed: () {
                           // Aquí podrías implementar la función de "Recuperar contraseña"
                         },
-                        child: Text('¿Olvidaste tu contraseña?'),
+                        child: Text('¿Olvidaste tu contraseña?',
+                            style: TextStyle(color: Colors.white)),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(30.0),
+                        child: ElevatedButton(
+                          onPressed: () {
+                            _authenticationBloc.add(AuthLoginGoogleEvent());
+                          },
+                          child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Image.asset(
+                                  'assets/google_button.png',
+                                  height: 50,
+                                  width: 50,
+                                ),
+                                const SizedBox(
+                                  width: 15,
+                                ),
+                                const Text('Ingresar con Google',
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black))
+                              ]),
+                        ),
                       ),
                     ],
                   ),
                 )
-
               ],
             ),
           ),

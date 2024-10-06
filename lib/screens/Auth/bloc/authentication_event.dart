@@ -8,14 +8,18 @@ sealed class AuthenticationEvent {
   List<Object> get props => [];
 }
 
-class AuthLoginEvent extends AuthenticationEvent {
+class AuthLoginEmailEvent extends AuthenticationEvent {
   final String email;
   final String password;
 
-  const AuthLoginEvent({required this.email, required this.password});
+  const AuthLoginEmailEvent({required this.email, required this.password});
 
   @override
   List<Object> get props => [email, password];
 }
 
+class AuthLoginGoogleEvent extends AuthenticationEvent {}
+
 class AuthAutoLoginEvent extends AuthenticationEvent {}
+
+class AuthLogOutEvent extends AuthenticationEvent {}
