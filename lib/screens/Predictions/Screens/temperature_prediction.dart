@@ -90,9 +90,9 @@ class _TemperaturePredictionState extends State<TemperaturePrediction> {
             ? Center(child: CircularProgressIndicator())
             : Column(
           children: [
-            const Text(
-              'Temperature Predictions for the Year',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+             Text(
+              widget.type == 'Max' ? 'Max Temperature' : 'Min Temperature',
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 20),
             // Graph displaying temperature data

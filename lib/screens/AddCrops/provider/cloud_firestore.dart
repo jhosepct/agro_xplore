@@ -1,5 +1,7 @@
+import 'dart:developer';
 import 'dart:io';
 import 'package:agro_xplore/screens/Navigation/navigation.dart';
+import 'package:agro_xplore/services/service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 // ignore: depend_on_referenced_packages
@@ -10,6 +12,21 @@ CollectionReference collectionUsers = db.collection('users');
 CollectionReference collectionCrops = db.collection('crops');
 // CollectionReference collectionTools = db.collection('tools');
 FirebaseStorage get storage => FirebaseStorage.instance;
+
+Map<int, String> monthNames = {
+  1: 'JAN',
+  2: 'FEB',
+  3: 'MAR',
+  4: 'APR',
+  5: 'MAY',
+  6: 'JUN',
+  7: 'JUL',
+  8: 'AUG',
+  9: 'SEP',
+  10: 'OCT',
+  11: 'NOV',
+  12: 'DEC'
+};
 
 // guardar datos del evento
 Future<void> addCrop(
@@ -24,7 +41,8 @@ Future<void> addCrop(
   double? area,
 ) async {
   //Llamado al api
-  Map<String, dynamic> result = await getIrrigationCrop();
+  Map<String, dynamic> result = await getService( area.toString(), showingDate.month.toString());
+  log(result.toString());
 
   String? imageURL;
   final docRef = collectionCrops.doc();
@@ -44,6 +62,8 @@ Future<void> addCrop(
     'longitude': longitude,
     'referenceLocation': referenceLocation,
     'showingDate': showingDate,
+    'area': area,
+    'watering': result['quantity'],
   };
 
   print('My user ID firebase: ${me.id}');
@@ -57,22 +77,30 @@ Future<void> addCrop(
     'latitude': latitude,
     'longitude': longitude,
     'referenceLocation': referenceLocation,
+    'area': area,
+    'watering': result['quantity'],
   });
 }
 
-Future<Map<String, dynamic>> getIrrigationCrop() async {
-  List<Map<String, dynamic>> irrigations = [];
+Future<Map<String, dynamic>> getService(String areaR, String monthR) async {
+  // Crea una instancia de ApiService
+  final apiService = ApiService('https://toucan-free-wholly.ngrok-free.app/calculate-wather');
+  String? monthSring = monthNames[int.parse(monthR)];
+  String product = 'product=papa';
+  String area = 'area=$areaR';
+  String month = 'month=$monthSring';
 
-  Map<String, dynamic> irrigation1 = {
-    'date': DateTime.now(),
-  };
+  String route = '$product&$area&$month';
 
-  Map<String, dynamic> result = {
-    'amounToWater': 0.0,
-    'irrigations': irrigations,
-  };
-  return result;
+  try {
+    Map<String, dynamic> response = await apiService.getData(route);
+    return response;
+  } catch (e) {
+    print('Error: $e');
+    return {};
+  }
 }
+
 
 Future<List<Map<String, dynamic>>> getUserCrops() async {
   try {

@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:agro_xplore/home/view/main_screen.dart';
 import 'package:agro_xplore/login/widgets/glassmorphic_box.dart';
 import 'package:agro_xplore/screens/AddCrops/provider/cloud_firestore.dart';
+import 'package:agro_xplore/screens/Navigation/navigation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -140,7 +141,6 @@ class _AddCropScreenState extends State<AddCropScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print('UID: ${me.id}');
     Widget image = const Icon(Icons.sunny, color: Colors.amberAccent,);
 
     if (imageGallery != null) {
@@ -318,7 +318,7 @@ class _AddCropScreenState extends State<AddCropScreen> {
                       return null;
                     },
                     decoration: const InputDecoration(
-                      labelText: 'Area',
+                      labelText: 'Area (m2)',
                       border: OutlineInputBorder(
                           borderRadius:
                               BorderRadius.all(Radius.circular(10.0))),
@@ -409,12 +409,17 @@ class _AddCropScreenState extends State<AddCropScreen> {
                               reference.text,
                               types[typeSelected]['name'],
                               imageGallery,
-                              _currentPosition?.altitude,
+                              _currentPosition?.latitude,
                               _currentPosition?.longitude,
                               selectedDateTime ?? DateTime.now(),
-                              area.text.isEmpty ? 0 : double.parse(area.text),
+                              area.text.isEmpty ? 0 : double.parse(area.text) / 10000,
                             ).then((value) {
-                              Navigator.pop(context);
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => NavigationScreen(),
+                                ),
+                              );
                             });
                           } else {
                             showDialog(
