@@ -1,9 +1,9 @@
 import 'package:agro_xplore/firebase_options.dart';
 import 'package:agro_xplore/login/cubit/auth_cubit.dart';
 import 'package:agro_xplore/login/provider/auth.dart';
-import 'package:agro_xplore/profile/cubit/my_user_cubit.dart';
-import 'package:agro_xplore/profile/provider/my_user_repository.dart';
 import 'package:agro_xplore/screens/Auth/splash_screen.dart';
+import 'package:agro_xplore/screens/profile/cubit/my_user_cubit.dart';
+import 'package:agro_xplore/screens/profile/provider/my_user_repository.dart';
 import 'package:agro_xplore/style/style.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';

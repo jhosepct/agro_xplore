@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 ThemeData uiTheme() {
   return ThemeData(
@@ -7,12 +8,16 @@ ThemeData uiTheme() {
     ),
     useMaterial3: true, // Material Design 3
     textTheme: Typography.material2021().black, // Estilo de texto para Material 3
-    appBarTheme: const AppBarTheme(
+    appBarTheme: AppBarTheme(
+      systemOverlayStyle: SystemUiOverlayStyle.light.copyWith(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: Brightness.dark,
+      ),
       elevation: 0, // Sin sombra en el AppBar
       backgroundColor: Colors.transparent, // AppBar transparente
       foregroundColor: Colors.black, // Color del texto e íconos en el AppBar
     ),
-    elevatedButtonTheme: ElevatedButtonThemeData(
+   /* elevatedButtonTheme: ElevatedButtonThemeData(
       style: ButtonStyle(
         backgroundColor: MaterialStateProperty.all(Colors.greenAccent), // Color verde suave para botones elevados
         textStyle: MaterialStateProperty.all(
@@ -26,6 +31,6 @@ ThemeData uiTheme() {
       border: OutlineInputBorder(
         borderRadius: BorderRadius.all(Radius.circular(10.0)), // Bordes redondeados
       ),
-    ),
+    ),*/
   );
 }

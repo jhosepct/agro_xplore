@@ -1,5 +1,6 @@
-import 'package:agro_xplore/Home/home/home.dart';
+
 import 'package:agro_xplore/screens/Auth/bloc/authentication_bloc.dart';
+import 'package:agro_xplore/screens/Navigation/navigation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:agro_xplore/assets/assets.dart';
@@ -49,7 +50,7 @@ class _SigninscreenState extends State<Signinscreen> {
                 context,
                 MaterialPageRoute(
                     builder: (context) => state.isLogged
-                        ? const HomeScreen()
+                        ? const NavigationScreen()
                         : const Signinscreen()));
           }
           if (state is AuthErrorLoginState) {

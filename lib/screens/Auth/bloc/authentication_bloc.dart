@@ -1,7 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import "package:meta/meta.dart";
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -39,11 +38,11 @@ class AuthenticationBloc
         final FirebaseAuth _auth = FirebaseAuth.instance;
         final GoogleSignIn googleSignIn = GoogleSignIn();
         final GoogleSignInAccount? googleSignInAccount =
-            await googleSignIn.signIn();
+        await googleSignIn.signIn();
 
         if (googleSignInAccount != null) {
           final GoogleSignInAuthentication googleSignInAuthentication =
-              await googleSignInAccount.authentication;
+          await googleSignInAccount.authentication;
 
           final AuthCredential credential = GoogleAuthProvider.credential(
             accessToken: googleSignInAuthentication.accessToken,
@@ -51,7 +50,7 @@ class AuthenticationBloc
           );
 
           UserCredential userCredential =
-              await _auth.signInWithCredential(credential);
+          await _auth.signInWithCredential(credential);
           print('User: ${userCredential.user!.email}');
 
           // Guardar el estado de autenticación localmente
@@ -85,7 +84,7 @@ class AuthenticationBloc
           } else {
             emit(const AuthErrorLoginState(
                 authErrorMessage:
-                    'No user logged in and no internet connection'));
+                'No user logged in and no internet connection'));
           }
         } else {
           // Con conexión, verificar con Firebase
@@ -93,7 +92,7 @@ class AuthenticationBloc
           if (user != null) {
             // Guardar estado local
             final SharedPreferences prefs =
-                await SharedPreferences.getInstance();
+            await SharedPreferences.getInstance();
             await prefs.setBool('isLogged', true);
 
             emit(const AuthLoggedState(isLogged: true));

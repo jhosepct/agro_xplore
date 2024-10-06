@@ -1,12 +1,10 @@
 // import 'dart:io';
 // import 'package:eventmatch/settings/provider/location.dart';
+import 'package:agro_xplore/login/cubit/auth_cubit.dart';
 import 'package:agro_xplore/login/widgets/glassmorphic_box.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-// import 'package:image_picker/image_picker.dart';
-// import '../../add_event/provider/cloud_firestore.dart';
-import '../../login/cubit/auth_cubit.dart';
 // import '../../login/widgets/glassmorphic_box.dart';
 import '../../profile/cubit/my_user_cubit.dart';
 
