@@ -252,7 +252,17 @@ class CalendarCard extends StatelessWidget {
       children: [
         IrrigationScheduleCard(
           name: 'Campo de Chupaca',
-          imageUrl: 'assets/plant1.jpg',
+          imageUrl: "https://firebasestorage.googleapis.com/v0/b/agroxplore-20288.appspot.com/o/crops%2Fv8vEFRQSL1pu5glvEPYY?alt=media&token=32539a3b-1849-422e-baa7-cd218e97a881"
+          ,description: "Cerca al convento de concepción ",
+          showingDate: "8 Oct, 2024",
+        ),
+        SizedBox(height: 16),
+        IrrigationScheduleCard(
+          name: "Siembra de pasos"
+          ,
+          imageUrl: "https://firebasestorage.googleapis.com/v0/b/agroxplore-20288.appspot.com/o/crops%2FLjTtPyAOLEOMbPZ6Um8T?alt=media&token=d4e872d8-d4bc-4d3a-9727-f9f0964414fa"
+          ,description: "Cerca al convento de concepción ",
+          showingDate: "25 Oct, 2024",
         ),
       ],
     );
@@ -262,9 +272,11 @@ class CalendarCard extends StatelessWidget {
 class IrrigationScheduleCard extends StatelessWidget {
   final String name;
   final String imageUrl;
+  final String description;
+  final String showingDate;
 
   const IrrigationScheduleCard(
-      {super.key, required this.name, required this.imageUrl});
+      {super.key, required this.name, required this.imageUrl, required this.description, required this.showingDate});
 
   @override
   Widget build(BuildContext context) {
@@ -287,24 +299,21 @@ class IrrigationScheduleCard extends StatelessWidget {
       child: Row(
         children: [
           Expanded(
-            child: Image.asset(
+            child: Image.network(
               imageUrl,
               fit: BoxFit.cover, // Ajuste de la imagen
             ),
           ),
           const SizedBox(width: 8),
-          const Column(
+           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Campo de Chupaca',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-              Text('Next watering on', style: TextStyle(fontSize: 16)),
+              Text(name,
+                  style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+              Text(description, style: TextStyle(fontSize: 16)),
               SizedBox(height: 8),
-              Text('22 Jun, 2021',
+              Text(showingDate,
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-              SizedBox(height: 8),
-              Text('Fertilize on Sep, 2021',
-                  style: TextStyle(fontSize: 16, color: Colors.grey)),
             ],
           ),
         ],

@@ -3,6 +3,7 @@ import 'package:agro_xplore/screens/AddCrops/view/add_crop_screen.dart';
 import 'package:agro_xplore/screens/Crops/Crops.dart';
 import 'package:agro_xplore/screens/Map/map.dart';
 import 'package:agro_xplore/screens/Navigation/home/home.dart';
+import 'package:agro_xplore/screens/Predictions/predictions_screen.dart';
 import 'package:agro_xplore/screens/profile/cubit/my_user_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -51,7 +52,7 @@ class _NavigationState extends State<NavigationScreen> {
                 const MapScreen(),
                 // const AddCropScreen(),
                 const CropsScreen(),
-                const Center(child: Text('Care Guide')),
+                const PredictionsScreen(),
               ],
             ),
             floatingActionButton: FloatingActionButton(

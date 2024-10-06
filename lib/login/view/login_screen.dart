@@ -27,7 +27,7 @@ class _LoginScreenState extends State<LoginScreen> {
         child: Container(
             decoration: const BoxDecoration(
               image: DecorationImage(
-                image: AssetImage('assets/intro.jpg'),
+                image: AssetImage('assets/intro.jpeg'),
                 fit: BoxFit.cover,
               ),
             ),
@@ -38,7 +38,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 children: [
                   const Padding(
                     padding: EdgeInsets.all(8.0),
-                    child: Text('The best application for your crops',
+                    child: Text('AgroXplore the best application for your crops',
                         style: TextStyle(
                           fontSize: 36,
                           fontWeight: FontWeight.bold,

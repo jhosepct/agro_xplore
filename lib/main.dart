@@ -20,7 +20,6 @@ void main() async {
     BlocProvider(create: (context) => MyUserCubit(MyUserRepository())),
   ], child: const MyApp()));
 }
-
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 

@@ -141,7 +141,7 @@ class _AddCropScreenState extends State<AddCropScreen> {
   @override
   Widget build(BuildContext context) {
     print('UID: ${me.id}');
-    Widget image = const Icon(Icons.sunny);
+    Widget image = const Icon(Icons.sunny, color: Colors.amberAccent,);
 
     if (imageGallery != null) {
       image = Image.file(imageGallery!);
@@ -162,8 +162,8 @@ class _AddCropScreenState extends State<AddCropScreen> {
     return Scaffold(
       // backgroundColor: Colors.black,
       appBar: AppBar(
-        backgroundColor: Colors.grey,
         title: const Text('New Crop'),
+        backgroundColor: Theme.of(context).colorScheme.primary,
       ),
       body: AbsorbPointer(
         absorbing: isLoading,
@@ -353,7 +353,7 @@ class _AddCropScreenState extends State<AddCropScreen> {
                                   borderRadius: BorderRadius.circular(10),
                                   border: Border.all(
                                     color:
-                                        isSelected ? Colors.blue : Colors.black,
+                                        isSelected ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.onPrimary,
                                     width: isSelected ? 3 : 5,
                                   ),
                                 ),
@@ -435,7 +435,7 @@ class _AddCropScreenState extends State<AddCropScreen> {
                             );
                           }
                         },
-                  color: isOk ? Colors.green : Colors.grey,
+                  color: isOk ? Theme.of(context).colorScheme.primary : Colors.grey,
                   child: Text('Guardar',
                       style: TextStyle(
                           fontSize: 22,

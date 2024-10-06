@@ -11,17 +11,27 @@ class CropDescriptionScreen extends StatefulWidget {
 
 class _CropDescriptionScreenState extends State<CropDescriptionScreen> {
   CollectionReference cropsCollection =
-      FirebaseFirestore.instance.collection('crops');
+  FirebaseFirestore.instance.collection('crops');
 
-  Map crop = {};
+  Map<String, dynamic> crop = {};
 
-  Future getCrop() async {
+  Future<void> getCrop() async {
     final cropSnapshot = await cropsCollection.doc(widget.id).get();
     if (cropSnapshot.exists) {
-      crop = cropSnapshot.data() as Map<dynamic, dynamic>? ?? {};
+      crop = cropSnapshot.data() as Map<String, dynamic>? ?? {};
     }
+    setState(() {}); // Actualiza la interfaz después de obtener los datos
   }
 
+  @override
+  void initState() {
+    super.initState();
+    getCrop(); // Llama a la función para obtener los datos del cultivo
+  }
+  String formattedDate(Timestamp date) {
+    DateTime dateTime = date.toDate();
+    return '${dateTime.day}/${dateTime.month}/${dateTime.year}';
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,67 +51,91 @@ class _CropDescriptionScreenState extends State<CropDescriptionScreen> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              crop['name'] ?? 'unknown',
-              style: const TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
+        child: crop.isNotEmpty
+            ? SingleChildScrollView(
+          child: Card(
+            elevation: 4,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    crop['title'] ?? 'Sin título',
+                    style: const TextStyle(
+                      fontSize: 28,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    crop['referenceLocation'] ?? 'Ubicación desconocida',
+                    style: const TextStyle(
+                      fontSize: 16,
+                      color: Colors.grey,
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  // Imagen del cultivo
+                  Image.network(
+                    crop['imageURL'] ??
+                        'https://via.placeholder.com/150',
+                    height: 200,
+                    fit: BoxFit.cover,
+                  ),
+                  const SizedBox(height: 20),
+                  _buildCareInfo('Requiere agua', crop['watering'] ?? '80'),
+                  _buildCareInfo('Fertilizando', crop['fertilizing'] ?? '50'),
+                  _buildCareInfo('Interior/Exterior', crop['indoors'] ?? 'Luz media'),
+                  const SizedBox(height: 20),
+                  const Text(
+                    'Descripción',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Text('Fecha de siembra: ${formattedDate(crop['showingDate'])}'),
+                  const SizedBox(height: 10),
+                  Text(
+                    crop['plantingDate'] ?? 'Desconocida',
+                    style: const TextStyle(fontSize: 14),
+                  ),
+                  const SizedBox(height: 20),
+                  TextButton(
+                    onPressed: () {
+                      // Acción para "Leer más"
+                    },
+                    child: const Text('Leer más'),
+                  ),
+                  const SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      ElevatedButton(
+                        onPressed: () {
+                          // Acción para "¿Algo mal?"
+                        },
+                        child: const Text('¿Algo mal?'),
+                      ),
+                      ElevatedButton(
+                        onPressed: () {
+                          // Acción para "Escanear planta"
+                        },
+                        child: const Text('Escanear planta'),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
-            const SizedBox(height: 10),
-            Text(
-              crop['referenceLocation'] ?? 'unknown',
-              style: const TextStyle(
-                fontSize: 16,
-                color: Colors.grey,
-              ),
-            ),
-            _buildCareInfo('Watering', crop['watering'] ?? '80'),
-            _buildCareInfo('Fertilizing', crop['fertilizing'] ?? '50'),
-            _buildCareInfo('Indoors', crop['indoors'] ?? 'Medium light'),
-            const SizedBox(height: 20),
-            const Text(
-              'More',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 10),
-            Text(
-              crop['description'] ?? 'No description available.',
-              style: TextStyle(fontSize: 14),
-            ),
-            const SizedBox(height: 10),
-            TextButton(
-              onPressed: () {
-                // Action for "Read more"
-              },
-              child: const Text('Read more'),
-            ),
-            const Spacer(),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                ElevatedButton(
-                  onPressed: () {
-                    // Action for "Something wrong?"
-                  },
-                  child: Text('Something wrong?'),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    // Action for "Scan plant"
-                  },
-                  child: Text('Scan plant'),
-                ),
-              ],
-            ),
-          ],
-        ),
+          ),
+        )
+            : const Center(child: CircularProgressIndicator()), // Indicador de carga mientras se obtiene la información
       ),
       bottomNavigationBar: const SizedBox(
         height: 60,
@@ -109,7 +143,7 @@ class _CropDescriptionScreenState extends State<CropDescriptionScreen> {
           color: Colors.white,
           child: Center(
             child: Text(
-              'Activity | Calendar',
+              'Actividad | Calendario',
               style: TextStyle(color: Colors.black),
             ),
           ),
@@ -126,11 +160,11 @@ class _CropDescriptionScreenState extends State<CropDescriptionScreen> {
         children: [
           Text(
             title,
-            style: TextStyle(fontSize: 16),
+            style: const TextStyle(fontSize: 16),
           ),
           Text(
             detail,
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
           ),
         ],
       ),

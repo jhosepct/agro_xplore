@@ -1,0 +1,48 @@
+import 'package:agro_xplore/screens/Predictions/Screens/temperature_prediction.dart';
+import 'package:flutter/material.dart';
+
+class PredictionsScreen extends StatefulWidget {
+  const PredictionsScreen({super.key});
+
+  @override
+  State<PredictionsScreen> createState() => _PredictionsScreenState();
+}
+
+class _PredictionsScreenState extends State<PredictionsScreen> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Predictions'),
+        backgroundColor: Theme.of(context).colorScheme.primary,
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            //Button to navigate to the next screen for predictions to temperature
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const TemperaturePrediction()));
+              },
+              child: const Text('Temperature Max'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const TemperaturePrediction()));
+              },
+              child: const Text('Temperature Min'),
+            ),
+
+          ],
+        ),
+      ),
+    );
+  }
+}

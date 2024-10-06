@@ -15,7 +15,7 @@ ThemeData uiTheme() {
       ),
       elevation: 0, // Sin sombra en el AppBar
       backgroundColor: Colors.transparent, // AppBar transparente
-      foregroundColor: Colors.black, // Color del texto e íconos en el AppBar
+      foregroundColor: Colors.white, // Color del texto e íconos en el AppBar
     ),
    /* elevatedButtonTheme: ElevatedButtonThemeData(
       style: ButtonStyle(
