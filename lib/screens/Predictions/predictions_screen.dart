@@ -1,4 +1,5 @@
-import 'package:agro_xplore/screens/Predictions/Screens/precipitacion_average_prediction.dart';
+import 'package:agro_xplore/screens/Predictions/Screens/precipitation_average_prediction.dart';
+import 'package:agro_xplore/screens/Predictions/Screens/specific_humidity_prediction.dart';
 import 'package:agro_xplore/screens/Predictions/Screens/temperature_prediction.dart';
 import 'package:agro_xplore/screens/Predictions/Screens/wind_speed_prediction.dart';
 import 'package:flutter/material.dart';
@@ -18,51 +19,70 @@ class _PredictionsScreenState extends State<PredictionsScreen> {
         title: const Text('Predictions'),
         backgroundColor: Theme.of(context).colorScheme.primary,
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: ListView(
           children: <Widget>[
-            //Button to navigate to the next screen for predictions to temperature
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const PrecipitationAverage()));
-              },
-              child: const Text('Precipitation'),
+            _buildPredictionCard(
+              context,
+              'Precipitation',
+              Icons.cloud,
+              const PrecipitationAverage(),
             ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const TemperaturePrediction(type: "Max",)));
-              },
-              child: const Text('Temperature Max'),
+            _buildPredictionCard(
+              context,
+              'Humidity',
+              Icons.water_drop,
+              const SpecificHumidity(),
             ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const TemperaturePrediction(type: "Min",)));
-              },
-              child: const Text('Temperature Min'),
+            _buildPredictionCard(
+              context,
+              'Temperature Max',
+              Icons.thermostat,
+              const TemperaturePrediction(type: "Max"),
             ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const WindSpeedPrediction(),
-                  ),
-                );
-              },
-              child: const Text('Wind Speed'),
+            _buildPredictionCard(
+              context,
+              'Temperature Min',
+              Icons.thermostat_outlined,
+              const TemperaturePrediction(type: "Min"),
+            ),
+            _buildPredictionCard(
+              context,
+              'Wind Speed',
+              Icons.air,
+              const WindSpeedPrediction(),
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  // Método para construir la tarjeta de predicción
+  Widget _buildPredictionCard(
+      BuildContext context, String title, IconData icon, Widget screen) {
+    return Card(
+      margin: const EdgeInsets.symmetric(vertical: 8.0),
+      elevation: 4,
+      child: ListTile(
+        leading: CircleAvatar(
+          backgroundColor: Theme.of(context).colorScheme.secondary,
+          child: Icon(icon, color: Colors.white),
+        ),
+        title: Text(
+          title,
+          style: const TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 18,
+          ),
+        ),
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => screen),
+          );
+        },
       ),
     );
   }
