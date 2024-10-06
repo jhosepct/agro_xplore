@@ -5,7 +5,8 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class TemperaturePrediction extends StatefulWidget {
-  const TemperaturePrediction({super.key});
+  final String type;
+  const TemperaturePrediction({super.key, required this.type});
 
   @override
   State<TemperaturePrediction> createState() => _TemperaturePredictionState();
@@ -51,7 +52,7 @@ class _TemperaturePredictionState extends State<TemperaturePrediction> {
     };
 
     try {
-      Map<String, dynamic> response = await apiService.postData('ruta', requestData);
+      Map<String, dynamic> response = await apiService.postData('temperature${widget.type}', requestData);
 
       // Extraer solo la parte "data"
       Map<String, double> fetchedTemperatureData = Map<String, double>.from(response['data']);

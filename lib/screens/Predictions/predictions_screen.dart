@@ -1,4 +1,5 @@
 import 'package:agro_xplore/screens/Predictions/Screens/temperature_prediction.dart';
+import 'package:agro_xplore/screens/Predictions/Screens/wind_speed_prediction.dart';
 import 'package:flutter/material.dart';
 
 class PredictionsScreen extends StatefulWidget {
@@ -26,7 +27,7 @@ class _PredictionsScreenState extends State<PredictionsScreen> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const TemperaturePrediction()));
+                        builder: (context) => const TemperaturePrediction(type: "Max",)));
               },
               child: const Text('Temperature Max'),
             ),
@@ -35,11 +36,21 @@ class _PredictionsScreenState extends State<PredictionsScreen> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const TemperaturePrediction()));
+                        builder: (context) => const TemperaturePrediction(type: "Min",)));
               },
               child: const Text('Temperature Min'),
             ),
-
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const WindSpeedPrediction(),
+                  ),
+                );
+              },
+              child: const Text('Wind Speed'),
+            ),
           ],
         ),
       ),
