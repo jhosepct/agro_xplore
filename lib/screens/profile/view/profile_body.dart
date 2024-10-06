@@ -1,9 +1,9 @@
-import 'package:agro_xplore/home/view/main_screen.dart';
 import 'package:agro_xplore/login/cubit/auth_cubit.dart';
 import 'package:agro_xplore/screens/profile/provider/firebase_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../Navigation/navigation.dart';
 import '../cubit/my_user_cubit.dart';
 
 class ProfileBody extends StatefulWidget {

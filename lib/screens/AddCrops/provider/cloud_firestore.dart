@@ -1,5 +1,5 @@
 import 'dart:io';
-import '../../../home/view/main_screen.dart';
+import 'package:agro_xplore/screens/Navigation/navigation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 // ignore: depend_on_referenced_packages
@@ -26,12 +26,11 @@ Future<void> addCrop(
   String? imageURL;
   final docRef = collectionCrops.doc();
   final docId = docRef.id;
-  // if (image != null) {
-  //   final imagePath = 'crops/$docId/${path.basename(image.path)}';
-  //   final storageRef = storage.ref(imagePath);
-  //   await storageRef.putFile(image);
-  //   imageURL = await storageRef.getDownloadURL();
-  // }
+  if (image != null) {
+    final ref = storage.ref().child('crops').child(docId);
+    await ref.putFile(image);
+    imageURL = await ref.getDownloadURL();
+  }
   final newDocument = {
     'id': docId,
     'title': title,
@@ -43,6 +42,8 @@ Future<void> addCrop(
     'referenceLocation': referenceLocation,
     'showingDate': showingDate,
   };
+
+  print('My user ID firebase: ${me.id}');
 
   await docRef.set(newDocument);
   await collectionUsers.doc(me.id).collection('myCrops').add({

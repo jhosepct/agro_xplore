@@ -1,7 +1,8 @@
-import 'package:agro_xplore/home/view/main_screen.dart';
 import 'package:agro_xplore/screens/profile/model/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+
+import '../../Navigation/navigation.dart';
 // ignore: depend_on_referenced_packages
 
 class FirebaseProvider {

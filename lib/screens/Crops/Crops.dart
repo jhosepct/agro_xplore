@@ -1,4 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+
+import '../Navigation/navigation.dart';
 
 class CropsScreen extends StatefulWidget {
   const CropsScreen({super.key});
@@ -8,6 +11,22 @@ class CropsScreen extends StatefulWidget {
 }
 
 class _CropsSplashState extends State<CropsScreen> {
+  CollectionReference projectsCollection =
+      FirebaseFirestore.instance.collection('crops');
+
+  CollectionReference userCollection =
+      FirebaseFirestore.instance.collection('users');
+
+  Future<List> getCrops() async {
+    List projectsInside = [];
+    final projectSnapshot =
+        await userCollection.doc(me.id).collection('myCrops').get();
+    if (projectSnapshot.docs.isNotEmpty) {
+      projectsInside = projectSnapshot.docs.map((doc) => doc.data()).toList();
+    }
+    return projectsInside;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -15,51 +34,35 @@ class _CropsSplashState extends State<CropsScreen> {
         title: const Text('My Crops'),
         backgroundColor: Theme.of(context).colorScheme.primary,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: GridView.count(
-          crossAxisCount: 2, // Dos columnas
-          crossAxisSpacing: 16, // Espacio horizontal entre las tarjetas
-          mainAxisSpacing: 16, // Espacio vertical entre las tarjetas
-          children: const [
-            CropCard(
-              name: 'Campo de Chupaca',
-              imageUrl: 'assets/plant1.jpg',
-              location: 'Chupaca, Junín',
-              plantingDate: '12/03/2024',
-            ),
-            CropCard(
-              name: 'Terreno 2',
-              imageUrl: 'assets/plant2.jpg',
-              location: 'Huancayo, Junín',
-              plantingDate: '25/06/2024',
-            ),
-            CropCard(
-              name: 'Chacra 1',
-              imageUrl: 'assets/plant3.jpg',
-              location: 'Concepción, Junín',
-              plantingDate: '01/04/2024',
-            ),
-            CropCard(
-              name: 'Chacra 2',
-              imageUrl: 'assets/plant1.jpg',
-              location: 'Jauja, Junín',
-              plantingDate: '08/02/2024',
-            ),
-            CropCard(
-              name: 'Chacra 3',
-              imageUrl: 'assets/plant2.jpg',
-              location: 'Tarma, Junín',
-              plantingDate: '19/05/2024',
-            ),
-            CropCard(
-              name: 'Chacra 4',
-              imageUrl: 'assets/plant3.jpg',
-              location: 'Satipo, Junín',
-              plantingDate: '10/07/2024',
-            ),
-          ],
-        ),
+      body: FutureBuilder(
+        future: getCrops(),
+        builder: ((BuildContext conatext, AsyncSnapshot snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasData && snapshot.data.isNotEmpty) {
+            List projects = snapshot.data;
+            return GridView.builder(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                // childAspectRatio: 3 / 2,
+                // crossAxisSpacing: 10,
+                // mainAxisSpacing: 1,
+              ),
+              itemCount: projects.length,
+              itemBuilder: (context, index) {
+                return CropCard(
+                  name: projects[index]['title'],
+                  imageUrl: projects[index]['imageURL'],
+                  location: projects[index]['referenceLocation'],
+                  plantingDate:
+                      projects[index]['showingDate'].toDate().toString(),
+                );
+              },
+            );
+          } else {
+            return const Center(child: Text('Empieza a añadir proyectos'));
+          }
+        }),
       ),
     );
   }
@@ -67,7 +70,7 @@ class _CropsSplashState extends State<CropsScreen> {
 
 class CropCard extends StatelessWidget {
   final String name;
-  final String imageUrl;
+  final String? imageUrl;
   final String location;
   final String plantingDate;
 
@@ -105,15 +108,22 @@ class CropCard extends StatelessWidget {
           ],
         ),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start, // Alinea el texto a la izquierda
+          crossAxisAlignment:
+              CrossAxisAlignment.start, // Alinea el texto a la izquierda
           children: [
             Expanded(
               child: ClipRRect(
-                borderRadius: BorderRadius.circular(12), // Bordes suaves para la imagen
-                child: Image.asset(
-                  imageUrl,
-                  fit: BoxFit.cover, // Ajuste de la imagen
-                ),
+                borderRadius:
+                    BorderRadius.circular(12), // Bordes suaves para la imagen
+                child: imageUrl == null
+                    ? Image.asset(
+                        'assets/plant1.jpg',
+                        fit: BoxFit.cover, // Ajuste de la imagen
+                      )
+                    : Image.network(
+                        imageUrl!,
+                        fit: BoxFit.cover, // Ajuste de la imagen
+                      ),
               ),
             ),
             const SizedBox(height: 8),
