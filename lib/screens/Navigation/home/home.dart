@@ -1,5 +1,6 @@
 import 'package:agro_xplore/screens/AddCrops/provider/cloud_firestore.dart';
 import 'package:agro_xplore/screens/CropDescription/crop_description.dart';
+import 'package:agro_xplore/screens/profile/view/profile_body.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -49,11 +50,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   .padding
                   .top, // + AppBar().preferredSize.height
             ),
-            const Row(
+            Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Column(
+                const Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
@@ -69,8 +70,16 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ],
                 ),
-                CircleAvatar(
-                  backgroundImage: AssetImage('assets/profile.jpg'),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const ProfileBody()));
+                  },
+                  child: const CircleAvatar(
+                    backgroundImage: AssetImage('assets/profile.jpg'),
+                  ),
                 ),
               ],
             ),

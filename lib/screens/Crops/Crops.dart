@@ -1,7 +1,7 @@
-import 'package:agro_xplore/screens/AddCrops/provider/cloud_firestore.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+
+import '../Navigation/navigation.dart';
 
 class CropsScreen extends StatefulWidget {
   const CropsScreen({super.key});
@@ -11,30 +11,22 @@ class CropsScreen extends StatefulWidget {
 }
 
 class _CropsSplashState extends State<CropsScreen> {
-  List<Map<String, dynamic>> _crops = [];
-  bool _isLoading = true;
-  String? _error;
+  CollectionReference projectsCollection =
+      FirebaseFirestore.instance.collection('crops');
 
-  @override
-  void initState() {
-    super.initState();
-    _loadCrops();
-  }
+  CollectionReference userCollection =
+      FirebaseFirestore.instance.collection('users');
 
-  Future<void> _loadCrops() async {
-    try {
-      final crops = await getUserCrops(); // Llama al método para obtener los crops
-      setState(() {
-        _crops = crops;
-        _isLoading = false; // Datos cargados correctamente
-      });
-    } catch (e) {
-      setState(() {
-        _error = 'Error loading crops: $e'; // Manejo de errores
-        _isLoading = false;
-      });
+  Future<List> getCrops() async {
+    List projectsInside = [];
+    final projectSnapshot =
+        await userCollection.doc(me.id).collection('myCrops').get();
+    if (projectSnapshot.docs.isNotEmpty) {
+      projectsInside = projectSnapshot.docs.map((doc) => doc.data()).toList();
     }
+    return projectsInside;
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,50 +34,52 @@ class _CropsSplashState extends State<CropsScreen> {
         title: const Text('My Crops'),
         backgroundColor: Theme.of(context).colorScheme.primary,
       ),
-      body: _isLoading
-          ? const Center(child: CircularProgressIndicator()) // Mostrar indicador de carga mientras se obtienen los datos
-          : _error != null
-          ? Center(child: Text(_error!)) // Mostrar error si ocurrió
-          : _crops.isEmpty
-          ? const Center(child: Text('No crops available')) // Mostrar mensaje si no hay cultivos
-          : Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: GridView.builder(
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2, // Dos columnas
-            crossAxisSpacing: 16, // Espacio horizontal entre las tarjetas
-            mainAxisSpacing: 16, // Espacio vertical entre las tarjetas
-          ),
-          itemCount: _crops.length,
-          itemBuilder: (context, index) {
-            final crop = _crops[index];
-            return CropCard(
-              title: crop['title'] ?? 'No title',
-              imageUrl: crop['imageURL'] ?? 'assets/placeholder.jpg',
-              location: crop['referenceLocation'] ?? 'Unknown location',
-              showingDate: crop['showingDate'] != null
-                  ? DateFormat('dd/MM/yyyy').format((crop['showingDate'] as Timestamp).toDate())
-                  : 'Unknown date',
+      body: FutureBuilder(
+        future: getCrops(),
+        builder: ((BuildContext conatext, AsyncSnapshot snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasData && snapshot.data.isNotEmpty) {
+            List projects = snapshot.data;
+            return GridView.builder(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                // childAspectRatio: 3 / 2,
+                // crossAxisSpacing: 10,
+                // mainAxisSpacing: 1,
+              ),
+              itemCount: projects.length,
+              itemBuilder: (context, index) {
+                return CropCard(
+                  name: projects[index]['title'],
+                  imageUrl: projects[index]['imageURL'],
+                  location: projects[index]['referenceLocation'],
+                  plantingDate:
+                      projects[index]['showingDate'].toDate().toString(),
+                );
+              },
             );
-          },
-        ),
+          } else {
+            return const Center(child: Text('Empieza a añadir proyectos'));
+          }
+        }),
       ),
     );
   }
 }
 
 class CropCard extends StatelessWidget {
-  final String title;
-  final String imageUrl;
+  final String name;
+  final String? imageUrl;
   final String location;
-  final String showingDate;
+  final String plantingDate;
 
   const CropCard({
     super.key,
-    required this.title,
+    required this.name,
     required this.imageUrl,
     required this.location,
-    required this.showingDate,
+    required this.plantingDate,
   });
 
   @override
@@ -96,7 +90,7 @@ class CropCard extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => CropDescriptionScreen(name: title),
+            builder: (context) => CropDescriptionScreen(name: name),
           ),
         );
       },
@@ -114,22 +108,29 @@ class CropCard extends StatelessWidget {
           ],
         ),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start, // Alinea el texto a la izquierda
+          crossAxisAlignment:
+              CrossAxisAlignment.start, // Alinea el texto a la izquierda
           children: [
             Expanded(
               child: ClipRRect(
-                borderRadius: BorderRadius.circular(12), // Bordes suaves para la imagen
-                child: Image.network(
-                  imageUrl,
-                  fit: BoxFit.cover, // Ajuste de la imagen
-                ),
+                borderRadius:
+                    BorderRadius.circular(12), // Bordes suaves para la imagen
+                child: imageUrl == null
+                    ? Image.asset(
+                        'assets/plant1.jpg',
+                        fit: BoxFit.cover, // Ajuste de la imagen
+                      )
+                    : Image.network(
+                        imageUrl!,
+                        fit: BoxFit.cover, // Ajuste de la imagen
+                      ),
               ),
             ),
             const SizedBox(height: 8),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: Text(
-                title,
+                name,
                 style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
@@ -150,7 +151,7 @@ class CropCard extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: Text(
-                'Sembrado el: $showingDate',
+                'Plantado el: $plantingDate',
                 style: const TextStyle(
                   fontSize: 12,
                   color: Colors.grey,

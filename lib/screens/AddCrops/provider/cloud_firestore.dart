@@ -1,5 +1,5 @@
 import 'dart:io';
-import '../../../home/view/main_screen.dart';
+import 'package:agro_xplore/screens/Navigation/navigation.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 // ignore: depend_on_referenced_packages
@@ -23,15 +23,18 @@ Future<void> addCrop(
   DateTime showingDate,
   double? area,
 ) async {
+
+  //Llamado al api
+  Map<String, dynamic> result = await getIrrigationCrop();
+
   String? imageURL;
   final docRef = collectionCrops.doc();
   final docId = docRef.id;
-  // if (image != null) {
-  //   final imagePath = 'crops/$docId/${path.basename(image.path)}';
-  //   final storageRef = storage.ref(imagePath);
-  //   await storageRef.putFile(image);
-  //   imageURL = await storageRef.getDownloadURL();
-  // }
+  if (image != null) {
+    final ref = storage.ref().child('crops').child(docId);
+    await ref.putFile(image);
+    imageURL = await ref.getDownloadURL();
+  }
   final newDocument = {
     'id': docId,
     'title': title,
@@ -44,6 +47,8 @@ Future<void> addCrop(
     'showingDate': showingDate,
   };
 
+  print('My user ID firebase: ${me.id}');
+
   await docRef.set(newDocument);
   await collectionUsers.doc(me.id).collection('myCrops').add({
     'id': docId,
@@ -54,6 +59,21 @@ Future<void> addCrop(
     'longitude': longitude,
     'referenceLocation': referenceLocation,
   });
+}
+
+Future<Map<String, dynamic>> getIrrigationCrop() async {
+
+  List<Map<String, dynamic>> irrigations = [];
+
+  Map<String, dynamic> irrigation1 = {
+    'date': DateTime.now(),
+  };
+
+  Map<String, dynamic> result = {
+    'amounToWater': 0.0,
+    'irrigations': irrigations,
+  };
+  return result;
 }
 
 Future<List<Map<String, dynamic>>> getUserCrops() async {

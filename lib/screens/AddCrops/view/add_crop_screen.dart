@@ -401,14 +401,16 @@ class _AddCropScreenState extends State<AddCropScreen> {
                             setState(() {
                               isLoading = true;
                             });
+
+
                             await addCrop(
                               title.text,
                               description.text,
                               reference.text,
                               types[typeSelected]['name'],
                               imageGallery,
-                              markerLocation?.latitude,
-                              markerLocation?.longitude,
+                              _currentPosition?.altitude,
+                              _currentPosition?.longitude,
                               selectedDateTime ?? DateTime.now(),
                               area.text.isEmpty ? 0 : double.parse(area.text),
                             ).then((value) {
