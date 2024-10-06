@@ -1,3 +1,4 @@
+import 'package:agro_xplore/screens/Predictions/Screens/precipitacion_average_prediction.dart';
 import 'package:agro_xplore/screens/Predictions/Screens/temperature_prediction.dart';
 import 'package:agro_xplore/screens/Predictions/Screens/wind_speed_prediction.dart';
 import 'package:flutter/material.dart';
@@ -22,6 +23,15 @@ class _PredictionsScreenState extends State<PredictionsScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             //Button to navigate to the next screen for predictions to temperature
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const PrecipitationAverage()));
+              },
+              child: const Text('Precipitation'),
+            ),
             ElevatedButton(
               onPressed: () {
                 Navigator.push(
