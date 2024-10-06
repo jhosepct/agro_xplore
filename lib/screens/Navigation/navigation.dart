@@ -6,9 +6,6 @@ import 'package:agro_xplore/screens/Map/map.dart';
 import 'package:agro_xplore/screens/Navigation/home/home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import '../profile/model/user.dart';
-
-MyUser me = MyUser('', '');
 
 class NavigationScreen extends StatefulWidget {
   const NavigationScreen({super.key});
@@ -39,10 +36,9 @@ class _NavigationState extends State<NavigationScreen> {
         index: _selectedIndex,
         children: [
           HomeScreen(onTapSeeAll: onTapSeeAll), // Pasa la función correctamente
-          const MapScreen(),
-          // const AddCropScreen(),
-          const CropsScreen(),
-          const Center(child: Text('Care Guide')),
+          MapScreen(),
+          CropsScreen(),
+          Center(child: Text('Others')),
         ],
       ),
       floatingActionButton: FloatingActionButton(

@@ -1,4 +1,7 @@
+import 'package:agro_xplore/screens/AddCrops/provider/cloud_firestore.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class CropsScreen extends StatefulWidget {
   const CropsScreen({super.key});
@@ -8,6 +11,30 @@ class CropsScreen extends StatefulWidget {
 }
 
 class _CropsSplashState extends State<CropsScreen> {
+  List<Map<String, dynamic>> _crops = [];
+  bool _isLoading = true;
+  String? _error;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadCrops();
+  }
+
+  Future<void> _loadCrops() async {
+    try {
+      final crops = await getUserCrops(); // Llama al método para obtener los crops
+      setState(() {
+        _crops = crops;
+        _isLoading = false; // Datos cargados correctamente
+      });
+    } catch (e) {
+      setState(() {
+        _error = 'Error loading crops: $e'; // Manejo de errores
+        _isLoading = false;
+      });
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -15,50 +42,32 @@ class _CropsSplashState extends State<CropsScreen> {
         title: const Text('My Crops'),
         backgroundColor: Theme.of(context).colorScheme.primary,
       ),
-      body: Padding(
+      body: _isLoading
+          ? const Center(child: CircularProgressIndicator()) // Mostrar indicador de carga mientras se obtienen los datos
+          : _error != null
+          ? Center(child: Text(_error!)) // Mostrar error si ocurrió
+          : _crops.isEmpty
+          ? const Center(child: Text('No crops available')) // Mostrar mensaje si no hay cultivos
+          : Padding(
         padding: const EdgeInsets.all(16.0),
-        child: GridView.count(
-          crossAxisCount: 2, // Dos columnas
-          crossAxisSpacing: 16, // Espacio horizontal entre las tarjetas
-          mainAxisSpacing: 16, // Espacio vertical entre las tarjetas
-          children: const [
-            CropCard(
-              name: 'Campo de Chupaca',
-              imageUrl: 'assets/plant1.jpg',
-              location: 'Chupaca, Junín',
-              plantingDate: '12/03/2024',
-            ),
-            CropCard(
-              name: 'Terreno 2',
-              imageUrl: 'assets/plant2.jpg',
-              location: 'Huancayo, Junín',
-              plantingDate: '25/06/2024',
-            ),
-            CropCard(
-              name: 'Chacra 1',
-              imageUrl: 'assets/plant3.jpg',
-              location: 'Concepción, Junín',
-              plantingDate: '01/04/2024',
-            ),
-            CropCard(
-              name: 'Chacra 2',
-              imageUrl: 'assets/plant1.jpg',
-              location: 'Jauja, Junín',
-              plantingDate: '08/02/2024',
-            ),
-            CropCard(
-              name: 'Chacra 3',
-              imageUrl: 'assets/plant2.jpg',
-              location: 'Tarma, Junín',
-              plantingDate: '19/05/2024',
-            ),
-            CropCard(
-              name: 'Chacra 4',
-              imageUrl: 'assets/plant3.jpg',
-              location: 'Satipo, Junín',
-              plantingDate: '10/07/2024',
-            ),
-          ],
+        child: GridView.builder(
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2, // Dos columnas
+            crossAxisSpacing: 16, // Espacio horizontal entre las tarjetas
+            mainAxisSpacing: 16, // Espacio vertical entre las tarjetas
+          ),
+          itemCount: _crops.length,
+          itemBuilder: (context, index) {
+            final crop = _crops[index];
+            return CropCard(
+              title: crop['title'] ?? 'No title',
+              imageUrl: crop['imageURL'] ?? 'assets/placeholder.jpg',
+              location: crop['referenceLocation'] ?? 'Unknown location',
+              showingDate: crop['showingDate'] != null
+                  ? DateFormat('dd/MM/yyyy').format((crop['showingDate'] as Timestamp).toDate())
+                  : 'Unknown date',
+            );
+          },
         ),
       ),
     );
@@ -66,17 +75,17 @@ class _CropsSplashState extends State<CropsScreen> {
 }
 
 class CropCard extends StatelessWidget {
-  final String name;
+  final String title;
   final String imageUrl;
   final String location;
-  final String plantingDate;
+  final String showingDate;
 
   const CropCard({
     super.key,
-    required this.name,
+    required this.title,
     required this.imageUrl,
     required this.location,
-    required this.plantingDate,
+    required this.showingDate,
   });
 
   @override
@@ -87,7 +96,7 @@ class CropCard extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => CropDescriptionScreen(name: name),
+            builder: (context) => CropDescriptionScreen(name: title),
           ),
         );
       },
@@ -110,7 +119,7 @@ class CropCard extends StatelessWidget {
             Expanded(
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(12), // Bordes suaves para la imagen
-                child: Image.asset(
+                child: Image.network(
                   imageUrl,
                   fit: BoxFit.cover, // Ajuste de la imagen
                 ),
@@ -120,7 +129,7 @@ class CropCard extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: Text(
-                name,
+                title,
                 style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
@@ -141,7 +150,7 @@ class CropCard extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: Text(
-                'Plantado el: $plantingDate',
+                'Sembrado el: $showingDate',
                 style: const TextStyle(
                   fontSize: 12,
                   color: Colors.grey,

@@ -55,3 +55,31 @@ Future<void> addCrop(
     'referenceLocation': referenceLocation,
   });
 }
+
+Future<List<Map<String, dynamic>>> getUserCrops() async {
+  try {
+    // Obtiene la referencia a la colección, pero puede que no exista
+    final userDocSnapshot = await collectionUsers.doc(me.id).get();
+
+    // Si el documento del usuario no existe o no tiene la subcolección, devuelve una lista vacía
+    if (!userDocSnapshot.exists) {
+      return [];
+    }
+
+    // Consulta la subcolección 'myCrops'
+    final userCropsSnapshot = await collectionUsers.doc(me.id).collection('myCrops').get();
+
+    // Si no hay documentos en la subcolección, también devuelve una lista vacía
+    if (userCropsSnapshot.docs.isEmpty) {
+      return [];
+    }
+
+    // Mapea los documentos de la subcolección a una lista
+    final userCrops = userCropsSnapshot.docs.map((doc) => doc.data()).toList();
+    return userCrops;
+  } catch (e) {
+    // Manejo de cualquier excepción que ocurra durante la consulta
+    print('Error fetching crops: $e');
+    return [];
+  }
+}

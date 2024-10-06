@@ -107,7 +107,7 @@ class _HomeScreenState extends State<HomeScreen> {
     Center(child: Text('Home')),
     Center(child: Text('Search')),
     Center(child: Text('My Plants')),
-    Center(child: Text('Care Guide')),
+    Center(child: Text('Others')),
   ];
 
 
@@ -177,11 +177,11 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.local_florist_rounded),
-            label: 'My Plants',
+            label: 'My Crops',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.info),
-            label: 'Care Guide',
+            label: 'Others',
           ),
         ],
       ),
