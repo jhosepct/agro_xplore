@@ -1,10 +1,14 @@
 import 'dart:developer';
 
+import 'package:agro_xplore/screens/AddCrops/view/add_crop_screen.dart';
 import 'package:agro_xplore/screens/Crops/Crops.dart';
 import 'package:agro_xplore/screens/Map/map.dart';
 import 'package:agro_xplore/screens/Navigation/home/home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import '../profile/model/user.dart';
+
+MyUser me = MyUser('', '');
 
 class NavigationScreen extends StatefulWidget {
   const NavigationScreen({super.key});
@@ -35,17 +39,23 @@ class _NavigationState extends State<NavigationScreen> {
         index: _selectedIndex,
         children: [
           HomeScreen(onTapSeeAll: onTapSeeAll), // Pasa la función correctamente
-          MapScreen(),
-          CropsScreen(),
-          Center(child: Text('Care Guide')),
+          const MapScreen(),
+          // const AddCropScreen(),
+          const CropsScreen(),
+          const Center(child: Text('Care Guide')),
         ],
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Theme.of(context).colorScheme.primary,
         onPressed: () {
-          setState(() {
-            _selectedIndex = 2; // Ejemplo: cuando se presiona cambia a "My Plants"
-          });
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const AddCropScreen()),
+          );
+          // setState(() {
+          //   _selectedIndex =
+          //       2; // Ejemplo: cuando se presiona cambia a "My Plants"
+          // });
         },
         shape: const CircleBorder(),
         child: Icon(Icons.add, color: Theme.of(context).colorScheme.onPrimary),
