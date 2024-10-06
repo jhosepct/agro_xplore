@@ -23,7 +23,6 @@ Future<void> addCrop(
   DateTime showingDate,
   double? area,
 ) async {
-
   //Llamado al api
   Map<String, dynamic> result = await getIrrigationCrop();
 
@@ -62,7 +61,6 @@ Future<void> addCrop(
 }
 
 Future<Map<String, dynamic>> getIrrigationCrop() async {
-
   List<Map<String, dynamic>> irrigations = [];
 
   Map<String, dynamic> irrigation1 = {
@@ -87,7 +85,8 @@ Future<List<Map<String, dynamic>>> getUserCrops() async {
     }
 
     // Consulta la subcolección 'myCrops'
-    final userCropsSnapshot = await collectionUsers.doc(me.id).collection('myCrops').get();
+    final userCropsSnapshot =
+        await collectionUsers.doc(me.id).collection('myCrops').get();
 
     // Si no hay documentos en la subcolección, también devuelve una lista vacía
     if (userCropsSnapshot.docs.isEmpty) {

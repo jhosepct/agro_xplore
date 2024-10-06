@@ -1,13 +1,27 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class CropDescriptionScreen extends StatefulWidget {
-  const CropDescriptionScreen({super.key});
+  final String id;
+  const CropDescriptionScreen({super.key, required this.id});
 
   @override
   State<CropDescriptionScreen> createState() => _CropDescriptionScreenState();
 }
 
 class _CropDescriptionScreenState extends State<CropDescriptionScreen> {
+  CollectionReference cropsCollection =
+      FirebaseFirestore.instance.collection('crops');
+
+  Map crop = {};
+
+  Future getCrop() async {
+    final cropSnapshot = await cropsCollection.doc(widget.id).get();
+    if (cropSnapshot.exists) {
+      crop = cropSnapshot.data() as Map<dynamic, dynamic>? ?? {};
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,45 +45,44 @@ class _CropDescriptionScreenState extends State<CropDescriptionScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Monstera Deliciosa',
-              style: TextStyle(
+              crop['name'] ?? 'unknown',
+              style: const TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             Text(
-              'Swiss Cheese Plant',
-              style: TextStyle(
+              crop['referenceLocation'] ?? 'unknown',
+              style: const TextStyle(
                 fontSize: 16,
                 color: Colors.grey,
               ),
             ),
-            _buildCareInfo('Watering', 'Once a week'),
-            _buildCareInfo('Fertilizing', 'Every 6 months'),
-            _buildCareInfo('Indoors', 'Medium light'),
-            _buildCareInfo('Difficulty level', 'Medium'),
-            SizedBox(height: 20),
-            Text(
+            _buildCareInfo('Watering', crop['watering'] ?? '80'),
+            _buildCareInfo('Fertilizing', crop['fertilizing'] ?? '50'),
+            _buildCareInfo('Indoors', crop['indoors'] ?? 'Medium light'),
+            const SizedBox(height: 20),
+            const Text(
               'More',
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             Text(
-              'Monstera deliciosas, commonly called split-leaf philodendron, is native to Central America. It is a climbing, evergreen perennial vine that is perhaps most noted for its large perforated leaves on thick plant stems and its long cord-like aerial roots. ',
+              crop['description'] ?? 'No description available.',
               style: TextStyle(fontSize: 14),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             TextButton(
               onPressed: () {
                 // Action for "Read more"
               },
-              child: Text('Read more'),
+              child: const Text('Read more'),
             ),
-            Spacer(),
+            const Spacer(),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -90,7 +103,7 @@ class _CropDescriptionScreenState extends State<CropDescriptionScreen> {
           ],
         ),
       ),
-      bottomNavigationBar: SizedBox(
+      bottomNavigationBar: const SizedBox(
         height: 60,
         child: BottomAppBar(
           color: Colors.white,

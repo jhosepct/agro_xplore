@@ -24,7 +24,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> _loadCrops() async {
     try {
-      final crops = await getUserCrops(); // Llama al método para obtener los crops
+      final crops =
+          await getUserCrops(); // Llama al método para obtener los crops
       setState(() {
         _crops = crops;
         _isLoading = false; // Datos cargados correctamente
@@ -166,8 +167,10 @@ class MyGardenSection extends StatelessWidget {
         itemBuilder: (context, index) {
           final crop = crops[index];
           return GardenPlantCard(
+            id: crop['id'] ?? '0',
             title: crop['title'] ?? 'Unknown',
-            imageUrl: crop['imageURL'] ?? 'assets/placeholder.jpg', // Imagen por defecto si no hay URL
+            imageUrl: crop['imageURL'] ??
+                'assets/placeholder.jpg', // Imagen por defecto si no hay URL
           );
         },
       ),
@@ -176,11 +179,15 @@ class MyGardenSection extends StatelessWidget {
 }
 
 class GardenPlantCard extends StatelessWidget {
+  final String id;
   final String title;
   final String imageUrl;
 
   const GardenPlantCard(
-      {super.key, required this.title, required this.imageUrl});
+      {super.key,
+      required this.id,
+      required this.title,
+      required this.imageUrl});
 
   @override
   Widget build(BuildContext context) {
@@ -192,7 +199,9 @@ class GardenPlantCard extends StatelessWidget {
           Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => const CropDescriptionScreen()));
+                  builder: (context) => CropDescriptionScreen(
+                        id: id,
+                      )));
         },
         child: Column(
           children: [
