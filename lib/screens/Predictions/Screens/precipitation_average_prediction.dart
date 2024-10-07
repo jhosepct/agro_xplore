@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:agro_xplore/screens/AddCrops/provider/cloud_firestore.dart';
 import 'package:agro_xplore/services/service.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -20,7 +22,6 @@ class _PrecipitationAverageState extends State<PrecipitationAverage> {
   @override
   void initState() {
     super.initState();
-    getService();
     getLocation();
   }
 
@@ -29,16 +30,15 @@ class _PrecipitationAverageState extends State<PrecipitationAverage> {
     Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
 
+    log("Position: $position");
     setState(() {
       userLocation = LatLng(position.latitude, position.longitude);
     });
+
+    getService();
   }
 
   void getService() async {
-    //get url from firebase in endpoints
-    Map<String, String> endpoints = await getEndpoints();
-    String? predictionsUrl = endpoints['predictions'];
-
     Map<String, dynamic> requestData = {
       'lat': userLocation?.latitude,
       'lon': userLocation?.longitude,
@@ -46,18 +46,21 @@ class _PrecipitationAverageState extends State<PrecipitationAverage> {
     };
 
     try {
-      Map<String, dynamic> response = await ApiService.postData('precipitationAverage', requestData);
+      Map<String, dynamic> response =
+          await ApiService.postData('precipitationAverage', requestData);
 
-      Map<String, double> fetchedPrecipitationData = Map<String, double>.from(response['data']);
+      Map<String, double> fetchedPrecipitationData =
+          Map<String, double>.from(response['data']);
 
       setState(() {
         precipitationData = fetchedPrecipitationData;
-        isLoading = false; // Establece la carga en falso después de obtener los datos
+        isLoading =
+            false; // Establece la carga en falso después de obtener los datos
       });
-
     } catch (e) {
       setState(() {
-        isLoading = false; // Asegúrate de que la carga se establezca en falso incluso en caso de error
+        isLoading =
+            false; // Asegúrate de que la carga se establezca en falso incluso en caso de error
       });
     }
   }
@@ -75,79 +78,84 @@ class _PrecipitationAverageState extends State<PrecipitationAverage> {
         padding: const EdgeInsets.all(16.0),
         child: isLoading
             ? Center(child: CircularProgressIndicator())
-            : precipitationData.isEmpty ?
-            Center(child: Text('No precipitation data found')): Column(
-          children: [
-            const Text(
-              'Average Precipitation (mm)',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 20),
-            // Gráfico que muestra los datos de precipitación
-            Expanded(
-              child: BarChart(
-                BarChartData(
-                  alignment: BarChartAlignment.spaceAround,
-                  barTouchData: BarTouchData(enabled: false),
-                  titlesData: FlTitlesData(
-                    show: true,
-                    bottomTitles: AxisTitles(
-                      sideTitles: SideTitles(
-                        showTitles: true,
-                        reservedSize: 40,
-                        getTitlesWidget: (value, meta) {
-                          const style = TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 12,
-                          );
-                          return SideTitleWidget(
-                            axisSide: meta.axisSide,
-                            child: Text(
-                              precipitationData.keys.toList()[value.toInt()],
-                              style: style,
+            : precipitationData.isEmpty
+                ? Center(child: Text('No precipitation data found'))
+                : Column(
+                    children: [
+                      const Text(
+                        'Average Precipitation (mm)',
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(height: 20),
+                      // Gráfico que muestra los datos de precipitación
+                      Expanded(
+                        child: BarChart(
+                          BarChartData(
+                            alignment: BarChartAlignment.spaceAround,
+                            barTouchData: BarTouchData(enabled: false),
+                            titlesData: FlTitlesData(
+                              show: true,
+                              bottomTitles: AxisTitles(
+                                sideTitles: SideTitles(
+                                  showTitles: true,
+                                  reservedSize: 40,
+                                  getTitlesWidget: (value, meta) {
+                                    const style = TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 12,
+                                    );
+                                    return SideTitleWidget(
+                                      axisSide: meta.axisSide,
+                                      child: Text(
+                                        precipitationData.keys
+                                            .toList()[value.toInt()],
+                                        style: style,
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+                              leftTitles: AxisTitles(
+                                sideTitles: SideTitles(
+                                  showTitles: true,
+                                  reservedSize: 28,
+                                  getTitlesWidget: (value, _) {
+                                    if (value % 1 == 0) {
+                                      return Text(
+                                        '${value.toInt()} mm',
+                                        style: const TextStyle(fontSize: 12),
+                                      );
+                                    }
+                                    return const Text('');
+                                  },
+                                ),
+                              ),
                             ),
-                          );
-                        },
+                            gridData: FlGridData(show: true),
+                            borderData: FlBorderData(show: false),
+                            barGroups: precipitationData.entries
+                                .toList()
+                                .asMap()
+                                .map((index, entry) => MapEntry(
+                                    index,
+                                    BarChartGroupData(x: index, barRods: [
+                                      BarChartRodData(
+                                        toY: entry.value,
+                                        width: isPortrait ? 12 : 22,
+                                        color: entry.value < 1
+                                            ? Colors.green
+                                            : Colors.blue,
+                                        borderRadius: BorderRadius.circular(4),
+                                      )
+                                    ])))
+                                .values
+                                .toList(),
+                          ),
+                        ),
                       ),
-                    ),
-                    leftTitles: AxisTitles(
-                      sideTitles: SideTitles(
-                        showTitles: true,
-                        reservedSize: 28,
-                        getTitlesWidget: (value, _) {
-                          if (value % 1 == 0) {
-                            return Text(
-                              '${value.toInt()} mm',
-                              style: const TextStyle(fontSize: 12),
-                            );
-                          }
-                          return const Text('');
-                        },
-                      ),
-                    ),
+                    ],
                   ),
-                  gridData: FlGridData(show: true),
-                  borderData: FlBorderData(show: false),
-                  barGroups: precipitationData.entries
-                      .toList()
-                      .asMap()
-                      .map((index, entry) => MapEntry(
-                      index,
-                      BarChartGroupData(x: index, barRods: [
-                        BarChartRodData(
-                          toY: entry.value,
-                          width: isPortrait ? 12 : 22,
-                          color: entry.value < 1 ? Colors.green : Colors.blue,
-                          borderRadius: BorderRadius.circular(4),
-                        )
-                      ])))
-                      .values
-                      .toList(),
-                ),
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }

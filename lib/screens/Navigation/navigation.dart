@@ -5,6 +5,7 @@ import 'package:agro_xplore/screens/Map/map.dart';
 import 'package:agro_xplore/screens/Navigation/home/home.dart';
 import 'package:agro_xplore/screens/Predictions/predictions_screen.dart';
 import 'package:agro_xplore/screens/profile/cubit/my_user_cubit.dart';
+import 'package:agro_xplore/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -21,6 +22,12 @@ class NavigationScreen extends StatefulWidget {
 }
 
 class _NavigationState extends State<NavigationScreen> {
+  @override
+  void initState() {
+    super.initState();
+    Utils.determinePosition();
+  }
+
   int _selectedIndex = 0;
 
   void _onItemTapped(int index) {

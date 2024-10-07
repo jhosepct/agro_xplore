@@ -21,8 +21,6 @@ class _TemperaturePredictionState extends State<TemperaturePrediction> {
   @override
   void initState() {
     super.initState();
-    // Llama a la función que realiza la petición a la API
-    getService();
     // Llama a la función que obtiene la ubicación del usuario
     getLocation();
   }
@@ -37,6 +35,7 @@ class _TemperaturePredictionState extends State<TemperaturePrediction> {
     setState(() {
       userLocation = LatLng(position.latitude, position.longitude);
     });
+    getService();
   }
 
   void getService() async {

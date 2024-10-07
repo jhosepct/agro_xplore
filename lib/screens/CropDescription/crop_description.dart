@@ -87,9 +87,9 @@ class _CropDescriptionScreenState extends State<CropDescriptionScreen> {
                     fit: BoxFit.cover,
                   ),
                   const SizedBox(height: 20),
-                  _buildCareInfo('Requires water', crop['watering'].toString() ?? '80'),
-                  _buildCareInfo('Fertilizing', crop['fertilizing'] ?? '50'),
-                  _buildCareInfo('Indoor/Outdoor', crop['indoors'] ?? 'Luz media'),
+                  _buildCareInfo('Requires water', '${crop['watering'].toStringAsFixed(2)}L' ?? '80'),
+                  _buildCareInfo('Fertilizing', '${crop['fertilizing'] ?? 50}Kg'),
+                  _buildCareInfo('Indoor/Outdoor', crop['indoors'] ?? 'Medium light'),
                   const SizedBox(height: 20),
                   const Text(
                     'Description',

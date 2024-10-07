@@ -19,7 +19,6 @@ class _WindSpeedPredictionState extends State<WindSpeedPrediction> {
   @override
   void initState() {
     super.initState();
-    getService();
     getLocation();
   }
 
@@ -31,6 +30,7 @@ class _WindSpeedPredictionState extends State<WindSpeedPrediction> {
     setState(() {
       userLocation = LatLng(position.latitude, position.longitude);
     });
+    getService();
   }
 
   void getService() async {
@@ -69,7 +69,7 @@ class _WindSpeedPredictionState extends State<WindSpeedPrediction> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Predicción de Velocidad del Viento'),
+        title: const Text('Wind Speed Prediction'),
         backgroundColor: Theme.of(context).colorScheme.primary,
       ),
       body: Padding(
@@ -77,11 +77,11 @@ class _WindSpeedPredictionState extends State<WindSpeedPrediction> {
         child: isLoading
             ? Center(child: CircularProgressIndicator())
             : windSpeedData.isEmpty
-                ? Center(child: Text('No se encontraron datos'))
+                ? Center(child: Text('No data found'))
                 : Column(
                     children: [
                       const Text(
-                        'Velocidad del Viento',
+                        'Wind Speed',
                         style: TextStyle(
                             fontSize: 20, fontWeight: FontWeight.bold),
                       ),

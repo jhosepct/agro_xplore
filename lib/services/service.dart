@@ -13,6 +13,9 @@ class ApiService {
     String? postURI = endpoints['post'];
     final url = Uri.parse('$postURI/predict/$route');
 
+    log('URL: $url');
+    log('Data: $data');
+
     try {
       final response = await http.post(
         url,

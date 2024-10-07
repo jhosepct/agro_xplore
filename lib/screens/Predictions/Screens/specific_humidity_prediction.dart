@@ -19,7 +19,6 @@ class _SpecificHumidityState extends State<SpecificHumidity> {
   @override
   void initState() {
     super.initState();
-    getService();
     getLocation();
   }
 
@@ -31,6 +30,7 @@ class _SpecificHumidityState extends State<SpecificHumidity> {
     setState(() {
       userLocation = LatLng(position.latitude, position.longitude);
     });
+    getService();
   }
 
   void getService() async {
