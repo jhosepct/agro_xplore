@@ -107,10 +107,14 @@ class _PrecipitationAverageState extends State<PrecipitationAverage> {
                                     );
                                     return SideTitleWidget(
                                       axisSide: meta.axisSide,
-                                      child: Text(
-                                        precipitationData.keys
-                                            .toList()[value.toInt()],
-                                        style: style,
+                                      space: isPortrait ? 12 : 4,
+                                      child: Transform.rotate(
+                                        angle: isPortrait ? -0.5 : 0,
+                                        child: Text(
+                                          precipitationData.keys
+                                              .toList()[value.toInt()],
+                                          style: style,
+                                        ),
                                       ),
                                     );
                                   },

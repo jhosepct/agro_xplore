@@ -95,10 +95,14 @@ class _SpecificHumidityState extends State<SpecificHumidity> {
                             fontSize: 12,
                           );
                           return SideTitleWidget(
+                            space: isPortrait ? 12 : 4,
                             axisSide: meta.axisSide,
-                            child: Text(
-                              humidityData.keys.toList()[value.toInt()],
-                              style: style,
+                            child: Transform.rotate(
+                              angle: isPortrait ? -0.5 : 0,
+                              child: Text(
+                                humidityData.keys.toList()[value.toInt()],
+                                style: style,
+                              ),
                             ),
                           );
                         },

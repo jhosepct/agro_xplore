@@ -177,7 +177,7 @@ class _AddCropScreenState extends State<AddCropScreen> {
                     SizedBox(
                         height: 300,
                         child: GoogleMap(
-                          mapType: MapType.normal,
+                          mapType: MapType.satellite,
                           initialCameraPosition: CameraPosition(
                             target: LatLng(_currentPosition?.latitude ?? 0,
                                 _currentPosition?.longitude ?? 0),

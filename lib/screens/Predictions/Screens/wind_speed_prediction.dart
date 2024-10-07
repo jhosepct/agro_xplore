@@ -102,10 +102,14 @@ class _WindSpeedPredictionState extends State<WindSpeedPrediction> {
                                     );
                                     return SideTitleWidget(
                                       axisSide: meta.axisSide,
-                                      child: Text(
-                                        windSpeedData.keys
-                                            .toList()[value.toInt()],
-                                        style: style,
+                                      space: isPortrait ? 12 : 4,
+                                      child: Transform.rotate(
+                                        angle: isPortrait ? -0.5 : 0,
+                                        child: Text(
+                                          windSpeedData.keys
+                                              .toList()[value.toInt()],
+                                          style: style,
+                                        ),
                                       ),
                                     );
                                   },

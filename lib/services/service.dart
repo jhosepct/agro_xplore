@@ -27,7 +27,9 @@ class ApiService {
 
       if (response.statusCode == 200) {
         // Si la respuesta es exitosa, devuelve el cuerpo de la respuesta como un mapa
-        return json.decode(response.body);
+        Map<String, dynamic> responseMap = json.decode(response.body);
+        responseMap['data'] = ordenarPorMes(responseMap['data']);
+        return responseMap;
       } else {
         // Maneja el error aquí
         throw Exception('Error al realizar la solicitud: ${response.statusCode}');
@@ -36,6 +38,12 @@ class ApiService {
       // Maneja cualquier excepción aquí
       throw Exception('Error al conectarse a la API: $e');
     }
+  }
+
+  static Map<String, dynamic> ordenarPorMes(Map<String, dynamic> data) {
+    List<String> meses = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+    var sortedKeys = data.keys.toList()..sort((a, b) => meses.indexOf(a).compareTo(meses.indexOf(b)));
+    return {for (var key in sortedKeys) key: data[key]};
   }
 
   // Método para realizar una solicitud GET

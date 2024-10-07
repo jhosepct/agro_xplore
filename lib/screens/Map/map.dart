@@ -117,6 +117,8 @@ class _MapScreenState extends State<MapScreen> {
           _currentPosition == null
               ? const Center(child: CircularProgressIndicator())
               : GoogleMap(
+            mapType: MapType.satellite,
+
             initialCameraPosition: CameraPosition(
               target: LatLng(-12.070547, -75.208819),
               zoom: 16.0,
