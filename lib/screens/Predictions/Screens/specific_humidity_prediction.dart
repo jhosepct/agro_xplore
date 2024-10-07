@@ -75,7 +75,7 @@ class _SpecificHumidityState extends State<SpecificHumidity> {
             :humidityData.isEmpty ? Center(child: Text('No data found')) :  Column(
           children: [
             const Text(
-              'Specific Humidity (g/kg)',
+              'Specific Humidity (%)',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 20),
@@ -115,7 +115,7 @@ class _SpecificHumidityState extends State<SpecificHumidity> {
                         getTitlesWidget: (value, _) {
                           if (value % 1 == 0) {
                             return Text(
-                              '${value.toInt()} g/kg',
+                              '${value.toInt()} %',
                               style: const TextStyle(fontSize: 12),
                             );
                           }
