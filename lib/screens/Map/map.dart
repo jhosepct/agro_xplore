@@ -58,8 +58,7 @@ class _MapScreenState extends State<MapScreen> {
       // Crear o actualizar el marcador del usuario
       _userMarker = Marker(
         markerId: const MarkerId('user_marker'),
-        //position: LatLng(position.latitude, position.longitude),
-        position: const LatLng(-12.070547, -75.208819),
+        position: LatLng(position.latitude, position.longitude),
         icon: BitmapDescriptor.defaultMarker, // Ícono personalizado
         infoWindow: const InfoWindow(title: 'Tu ubicación actual'),
       );
@@ -83,7 +82,7 @@ class _MapScreenState extends State<MapScreen> {
         _cropMarkers = crops.map((crop) {
           return Marker(
             markerId: MarkerId(crop['id']),
-            position: LatLng(double.parse(crop['latitude']), double.parse(crop['longitude'])),
+            position: LatLng(crop['latitude'], crop['longitude']),
             infoWindow: InfoWindow(
               title: crop['title'],
               snippet: 'Ubicación: ${crop['referenceLocation']}',
@@ -94,13 +93,11 @@ class _MapScreenState extends State<MapScreen> {
         }).toSet();
       });
     } catch (e) {
-      print("Error loading crop markers: $e");
+      log('Error al cargar los markers de los crops: $e');
     }
   }
   void _onMarkerTap(Map<String, dynamic> crop) {
-    log("message");
     setState(() {
-      log(crop.toString());
       _selectedCrop = crop;
       _isCardVisible = true;
     });
@@ -167,9 +164,9 @@ class _MapScreenState extends State<MapScreen> {
                 style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 8),
-              Text('Ubicación: ${_selectedCrop!['referenceLocation']}'),
+              Text('Reference: ${_selectedCrop!['referenceLocation']}'),
               const SizedBox(height: 8),
-              Text('Fecha: ${formattedDate(_selectedCrop!['showingDate'])}'),
+              Text('Date: ${formattedDate(_selectedCrop!['showingDate'])}'),
               const SizedBox(height: 16),
               Row(
                 children: [
@@ -179,7 +176,7 @@ class _MapScreenState extends State<MapScreen> {
                         _isCardVisible = false; // Oculta la tarjeta
                       });
                     },
-                    child: const Text('Cerrar'),
+                    child: const Text('Close'),
                   ),
                   const SizedBox(width: 16),
                   ElevatedButton(
@@ -191,7 +188,7 @@ class _MapScreenState extends State<MapScreen> {
                                 id: _selectedCrop!['id'],
                               )));
                     },
-                    child: const Text('Mas detalles'),
+                    child: const Text('View Details'),
                   ),
                 ],
               )

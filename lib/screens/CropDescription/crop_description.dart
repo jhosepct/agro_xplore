@@ -87,19 +87,19 @@ class _CropDescriptionScreenState extends State<CropDescriptionScreen> {
                     fit: BoxFit.cover,
                   ),
                   const SizedBox(height: 20),
-                  _buildCareInfo('Requiere agua', crop['watering'].toString() ?? '80'),
-                  _buildCareInfo('Fertilizando', crop['fertilizing'] ?? '50'),
-                  _buildCareInfo('Interior/Exterior', crop['indoors'] ?? 'Luz media'),
+                  _buildCareInfo('Requires water', crop['watering'].toString() ?? '80'),
+                  _buildCareInfo('Fertilizing', crop['fertilizing'] ?? '50'),
+                  _buildCareInfo('Indoor/Outdoor', crop['indoors'] ?? 'Luz media'),
                   const SizedBox(height: 20),
                   const Text(
-                    'Descripción',
+                    'Description',
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   const SizedBox(height: 10),
-                  Text('Fecha de siembra: ${formattedDate(crop['showingDate'])}'),
+                  Text('Sowing date: ${formattedDate(crop['showingDate'])}'),
                   const SizedBox(height: 10),
                   Text(
                     crop['plantingDate'] ?? 'Desconocida',
@@ -110,7 +110,7 @@ class _CropDescriptionScreenState extends State<CropDescriptionScreen> {
                     onPressed: () {
                       // Acción para "Leer más"
                     },
-                    child: const Text('Leer más'),
+                    child: const Text('Read more'),
                   ),
                   const SizedBox(height: 20),
                   Row(
@@ -120,13 +120,13 @@ class _CropDescriptionScreenState extends State<CropDescriptionScreen> {
                         onPressed: () {
                           // Acción para "¿Algo mal?"
                         },
-                        child: const Text('¿Algo mal?'),
+                        child: const Text('Something wrong?'),
                       ),
                       ElevatedButton(
                         onPressed: () {
                           // Acción para "Escanear planta"
                         },
-                        child: const Text('Escanear planta'),
+                        child: const Text('Scan plant'),
                       ),
                     ],
                   ),
@@ -143,7 +143,7 @@ class _CropDescriptionScreenState extends State<CropDescriptionScreen> {
           color: Colors.white,
           child: Center(
             child: Text(
-              'Actividad | Calendario',
+              'Activity | Calendar',
               style: TextStyle(color: Colors.black),
             ),
           ),

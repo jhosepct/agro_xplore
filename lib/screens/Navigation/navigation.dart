@@ -95,8 +95,8 @@ class _NavigationState extends State<NavigationScreen> {
                   label: 'My Crops',
                 ),
                 BottomNavigationBarItem(
-                  icon: Icon(Icons.info),
-                  label: 'Care Guide',
+                  icon: Icon(Icons.cloud_rounded),
+                  label: 'Predictions',
                 ),
               ],
             ),

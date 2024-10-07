@@ -38,19 +38,20 @@ class _LoginScreenState extends State<LoginScreen> {
                 children: [
                   const Padding(
                     padding: EdgeInsets.all(8.0),
-                    child: Text('AgroXplore the best application for your crops',
-                        style: TextStyle(
-                          fontSize: 36,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                          shadows: [
-                            Shadow(
-                              blurRadius: 10.0,
-                              color: Colors.black87,
-                              offset: Offset(5.0, 5.0),
-                            ),
-                          ],
-                        )),
+                    child:
+                        Text('AgroXplore the best application for your crops',
+                            style: TextStyle(
+                              fontSize: 36,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                              shadows: [
+                                Shadow(
+                                  blurRadius: 10.0,
+                                  color: Colors.black87,
+                                  offset: Offset(5.0, 5.0),
+                                ),
+                              ],
+                            )),
                   ),
                   (isSigningIn)
                       ? const CircularProgressIndicator()
@@ -67,9 +68,11 @@ class _LoginScreenState extends State<LoginScreen> {
                                       MaterialStateProperty.all(Colors.white),
                                 ),
                                 child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 8, horizontal: 4),
                                   child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
                                       children: [
                                         Image.asset(
                                           'assets/google_button.png',
@@ -81,7 +84,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                         ),
                                         const Text('Sign up with Google',
                                             style: TextStyle(
-                                                fontSize: 22,
+                                                fontSize: 20,
                                                 fontWeight: FontWeight.bold,
                                                 color: Colors.black))
                                       ]),
@@ -93,10 +96,11 @@ class _LoginScreenState extends State<LoginScreen> {
                               GlassBox(
                                 onTap: () {},
                                 child: const Padding(
-                                  padding: EdgeInsets.symmetric(vertical: 8),
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: 8, horizontal: 4),
                                   child: Text('Other sign in options',
                                       style: TextStyle(
-                                          fontSize: 22,
+                                          fontSize: 20,
                                           fontWeight: FontWeight.bold,
                                           color: Colors.white)),
                                 ),

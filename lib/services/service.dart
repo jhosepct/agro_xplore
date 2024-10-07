@@ -1,15 +1,17 @@
 import 'dart:convert'; // Para codificar y decodificar JSON
 import 'dart:developer';
+import 'package:agro_xplore/screens/AddCrops/provider/cloud_firestore.dart';
 import 'package:http/http.dart' as http;
 
 class ApiService {
-  final String baseUrl;
 
-  ApiService(this.baseUrl);
+  ApiService();
 
   // Método para realizar una solicitud POST
-  Future<Map<String, dynamic>> postData(String route, Map<String, dynamic> data) async {
-    final url = Uri.parse('$baseUrl/predict/$route');
+  static Future<Map<String, dynamic>> postData(String route, Map<String, dynamic> data) async {
+    Map<String, String> endpoints = await getEndpoints();
+    String? postURI = endpoints['post'];
+    final url = Uri.parse('$postURI/predict/$route');
 
     try {
       final response = await http.post(
@@ -34,10 +36,10 @@ class ApiService {
   }
 
   // Método para realizar una solicitud GET
-  Future<Map<String, dynamic>> getData(String route) async {
-    final url = Uri.parse('$baseUrl?$route');
-
-    log('URL: $url');
+  static Future<Map<String, dynamic>> getData(String route) async {
+    Map<String, String> endpoints = await getEndpoints();
+    String? getURI = endpoints['get'];
+    final url = Uri.parse('$getURI?$route');
 
     try {
       final response = await http.get(url);

@@ -26,7 +26,7 @@ class _ProfileBodyState extends State<ProfileBody> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Perfil', style: TextStyle(color: Theme.of(context).colorScheme.primary)),
+        title: Text('Profile', style: TextStyle(color: Theme.of(context).colorScheme.primary)),
         backgroundColor: Colors.transparent,
         leading: IconButton(
           icon: Icon(
@@ -61,8 +61,8 @@ class _ProfileBodyState extends State<ProfileBody> {
                 const SizedBox(height: 16),
                 _buildActionCard(
                   context,
-                  'Cerrar cuenta',
-                  '¿Cerrar sesión de AgroXplore?',
+                  'Close account',
+                  'Sign out of AgroXplore?',
                   Icons.logout,
                   Colors.orange,
                   _signOut,
@@ -70,8 +70,8 @@ class _ProfileBodyState extends State<ProfileBody> {
                 const SizedBox(height: 16),
                 _buildActionCard(
                   context,
-                  'Eliminar cuenta',
-                  'Si eliminas tu cuenta, se borrarán todos tus datos registrados.',
+                  'Delete account',
+                  'If you delete your account, all your recorded data will be deleted.',
                   Icons.delete,
                   Colors.red,
                   _deleteAccount,
@@ -118,14 +118,14 @@ class _ProfileBodyState extends State<ProfileBody> {
             onPressed: () {
               Navigator.pop(context);
             },
-            child: const Text('Cancelar'),
+            child: const Text('Cancel'),
           ),
           ElevatedButton(
             onPressed: () async {
               await onTap();
               Navigator.pop(context);
             },
-            child: const Text('Confirmar'),
+            child: const Text('Confirm'),
           ),
         ],
       ),

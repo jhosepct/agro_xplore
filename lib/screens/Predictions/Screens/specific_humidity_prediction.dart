@@ -34,8 +34,6 @@ class _SpecificHumidityState extends State<SpecificHumidity> {
   }
 
   void getService() async {
-    final apiService = ApiService('https://toucan-free-wholly.ngrok-free.app');
-
     Map<String, dynamic> requestData = {
       'lat': userLocation?.latitude,
       'lon': userLocation?.longitude,
@@ -43,7 +41,7 @@ class _SpecificHumidityState extends State<SpecificHumidity> {
     };
 
     try {
-      Map<String, dynamic> response = await apiService.postData('specificHumidity', requestData);
+      Map<String, dynamic> response = await ApiService.postData('specificHumidity', requestData);
 
       Map<String, double> fetchedHumidityData = Map<String, double>.from(response['data']);
 
@@ -67,17 +65,17 @@ class _SpecificHumidityState extends State<SpecificHumidity> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Humedad Específica'),
+        title: const Text('Specific Humidity'),
         backgroundColor: Theme.of(context).colorScheme.primary,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: isLoading
             ? Center(child: CircularProgressIndicator())
-            : Column(
+            :humidityData.isEmpty ? Center(child: Text('No data found')) :  Column(
           children: [
             const Text(
-              'Humedad Específica (g/kg)',
+              'Specific Humidity (g/kg)',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 20),

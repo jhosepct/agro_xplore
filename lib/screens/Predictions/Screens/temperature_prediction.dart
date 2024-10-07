@@ -40,8 +40,6 @@ class _TemperaturePredictionState extends State<TemperaturePrediction> {
   }
 
   void getService() async {
-    // Crea una instancia de ApiService
-    final apiService = ApiService('https://toucan-free-wholly.ngrok-free.app');
 
     // Datos que deseas enviar
     Map<String, dynamic> requestData = {
@@ -52,7 +50,7 @@ class _TemperaturePredictionState extends State<TemperaturePrediction> {
     };
 
     try {
-      Map<String, dynamic> response = await apiService.postData('temperature${widget.type}', requestData);
+      Map<String, dynamic> response = await ApiService.postData('temperature${widget.type}', requestData);
 
       // Extraer solo la parte "data"
       Map<String, double> fetchedTemperatureData = Map<String, double>.from(response['data']);
@@ -88,9 +86,9 @@ class _TemperaturePredictionState extends State<TemperaturePrediction> {
         padding: const EdgeInsets.all(16.0),
         child: isLoading // Show loading indicator if data is being fetched
             ? Center(child: CircularProgressIndicator())
-            : Column(
+            : temperatureData.isEmpty ? Center(child: Text('No data found')): Column(
           children: [
-             Text(
+            Text(
               widget.type == 'Max' ? 'Max Temperature' : 'Min Temperature',
               style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),

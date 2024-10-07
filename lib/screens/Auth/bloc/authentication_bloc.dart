@@ -20,7 +20,6 @@ class AuthenticationBloc
           email: event.email,
           password: event.password,
         );
-        print('User: ${userCredential.user!.email}');
 
         // Guardar el estado de autenticación localmente
         final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -51,7 +50,6 @@ class AuthenticationBloc
 
           UserCredential userCredential =
           await _auth.signInWithCredential(credential);
-          print('User: ${userCredential.user!.email}');
 
           // Guardar el estado de autenticación localmente
           final SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -59,7 +57,6 @@ class AuthenticationBloc
 
           emit(const AuthLoggedState(isLogged: true));
         } else {
-          print("FALOOOOOOO LA AUTENTICACION");
           emit(const AuthErrorLoginState(
               authErrorMessage: 'Google sign in failed'));
         }

@@ -42,7 +42,6 @@ Future<void> addCrop(
 ) async {
   //Llamado al api
   Map<String, dynamic> result = await getService( area.toString(), showingDate.month.toString());
-  log(result.toString());
 
   String? imageURL;
   final docRef = collectionCrops.doc();
@@ -66,7 +65,6 @@ Future<void> addCrop(
     'watering': result['quantity'],
   };
 
-  print('My user ID firebase: ${me.id}');
 
   await docRef.set(newDocument);
   await collectionUsers.doc(me.id).collection('myCrops').add({
@@ -82,9 +80,39 @@ Future<void> addCrop(
   });
 }
 
+Future<Map<String, String>> getEndpoints() async {
+  try {
+    // Accede a la colección 'endpoints' y al documento con el ID proporcionado
+    DocumentSnapshot doc = await FirebaseFirestore.instance
+        .collection('endpoints')
+        .doc('Oho5WDEdQVsIxieL54Ox')
+        .get();
+
+    if (doc.exists) {
+      // Obtén los campos 'calculateWather' y 'predictions'
+      String get = doc.get('get');
+      String post = doc.get('post');
+
+      // Devuelve los valores como un mapa
+      return {
+        'get': get,
+        'post': post,
+      };
+    } else {
+      return {};
+    }
+  } catch (e) {
+    return {};
+  }
+}
+
 Future<Map<String, dynamic>> getService(String areaR, String monthR) async {
+
+  //get url from firebase in endpoints
+  Map<String, String> endpoints = await getEndpoints();
+  String? calculateWatherUrl = endpoints['calculateWather'];
+
   // Crea una instancia de ApiService
-  final apiService = ApiService('https://toucan-free-wholly.ngrok-free.app/calculate-wather');
   String? monthSring = monthNames[int.parse(monthR)];
   String product = 'product=papa';
   String area = 'area=$areaR';
@@ -93,10 +121,9 @@ Future<Map<String, dynamic>> getService(String areaR, String monthR) async {
   String route = '$product&$area&$month';
 
   try {
-    Map<String, dynamic> response = await apiService.getData(route);
+    Map<String, dynamic> response = await ApiService.getData(route);
     return response;
   } catch (e) {
-    print('Error: $e');
     return {};
   }
 }
@@ -125,8 +152,6 @@ Future<List<Map<String, dynamic>>> getUserCrops() async {
     final userCrops = userCropsSnapshot.docs.map((doc) => doc.data()).toList();
     return userCrops;
   } catch (e) {
-    // Manejo de cualquier excepción que ocurra durante la consulta
-    print('Error fetching crops: $e');
     return [];
   }
 }

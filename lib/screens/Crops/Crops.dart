@@ -26,7 +26,7 @@ class _CropsSplashState extends State<CropsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Mis Cultivos'),
+        title: const Text('My Crops'),
         backgroundColor: Theme.of(context).colorScheme.primary,
       ),
       body: FutureBuilder(

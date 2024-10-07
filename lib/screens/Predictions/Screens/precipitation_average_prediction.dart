@@ -1,3 +1,4 @@
+import 'package:agro_xplore/screens/AddCrops/provider/cloud_firestore.dart';
 import 'package:agro_xplore/services/service.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
@@ -34,7 +35,9 @@ class _PrecipitationAverageState extends State<PrecipitationAverage> {
   }
 
   void getService() async {
-    final apiService = ApiService('https://toucan-free-wholly.ngrok-free.app');
+    //get url from firebase in endpoints
+    Map<String, String> endpoints = await getEndpoints();
+    String? predictionsUrl = endpoints['predictions'];
 
     Map<String, dynamic> requestData = {
       'lat': userLocation?.latitude,
@@ -43,7 +46,7 @@ class _PrecipitationAverageState extends State<PrecipitationAverage> {
     };
 
     try {
-      Map<String, dynamic> response = await apiService.postData('precipitationAverage', requestData);
+      Map<String, dynamic> response = await ApiService.postData('precipitationAverage', requestData);
 
       Map<String, double> fetchedPrecipitationData = Map<String, double>.from(response['data']);
 
@@ -52,9 +55,7 @@ class _PrecipitationAverageState extends State<PrecipitationAverage> {
         isLoading = false; // Establece la carga en falso después de obtener los datos
       });
 
-      print('Datos de precipitación: $precipitationData');
     } catch (e) {
-      print('Error: $e');
       setState(() {
         isLoading = false; // Asegúrate de que la carga se establezca en falso incluso en caso de error
       });
@@ -67,17 +68,18 @@ class _PrecipitationAverageState extends State<PrecipitationAverage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Precipitación Promedio'),
+        title: const Text('Average Precipitation'),
         backgroundColor: Theme.of(context).colorScheme.primary,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: isLoading
             ? Center(child: CircularProgressIndicator())
-            : Column(
+            : precipitationData.isEmpty ?
+            Center(child: Text('No precipitation data found')): Column(
           children: [
             const Text(
-              'Precipitación Promedio (mm)',
+              'Average Precipitation (mm)',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 20),
